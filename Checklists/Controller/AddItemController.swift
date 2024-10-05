@@ -8,11 +8,9 @@
 import UIKit
 
 class AddItemController: UITableViewController, UITextFieldDelegate {
-    
-    let checklistController = ChecklistController()
+    weak var delegate: AddItemDelegate?
     @IBOutlet weak var textField: UITextField!
     @IBOutlet weak var doneBarButton: UIBarButtonItem!
-    
     
     override func viewDidLoad(){
         super.viewDidLoad()
@@ -22,20 +20,20 @@ class AddItemController: UITableViewController, UITextFieldDelegate {
     
     //MARK: - Actions
     @IBAction func cancelPressed(){
-        navigationController?.popViewController(animated: true)
+        delegate?.addItemDidCancel(self)
     }
     
     @IBAction func donePressed(){
         if let title = textField.text, isValidInput(text: title) {
-            checklistController.addItem(title: title)
+            delegate?.addItem(self, title: title)
         }
-        navigationController?.popViewController(animated: true)
     }
     
     //MARK: - Custom Functions
     func isValidInput(text: String) -> Bool {
         return !text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
     }
+
 }
 
 extension AddItemController {
@@ -57,4 +55,9 @@ extension AddItemController {
         let text = textField.text ?? ""
         return isValidInput(text: text)
     }
+}
+
+protocol AddItemDelegate : AnyObject {
+    func addItemDidCancel(_ controller: AddItemController)
+    func addItem(_ controller: AddItemController, title: String)
 }

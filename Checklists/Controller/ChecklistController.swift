@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ChecklistController: UITableViewController {
+class ChecklistController: UITableViewController, AddItemDelegate {
     
     let dataModel = DataModel()
     
@@ -17,7 +17,7 @@ class ChecklistController: UITableViewController {
     }
     
     // MARK: - Actions
-
+    
     
     //MARK: - Custom Functions
     func configureTitle(for cell: UITableViewCell, with item: ChecklistItem){
@@ -28,19 +28,30 @@ class ChecklistController: UITableViewController {
     func configureCheckmark(for cell: UITableViewCell, with item: ChecklistItem){
         cell.accessoryType = item.hasCheckmark ? .checkmark : .none
     }
-    
-    func addItem(title: String){
-        print(title)
-        let rowIndex = dataModel.itemsCount
-        dataModel.addItem(title: title)
-        
-        let indexPath = IndexPath(row: rowIndex, section: 0)
-        let indexPaths = [indexPath]
-        tableView.insertRows(at: indexPaths, with: .automatic)
-    }
 }
 
 extension ChecklistController {
+    //MARK: - Navigation
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "AddItem"{
+            let controller = segue.destination as! AddItemController
+            controller.delegate = self
+        }
+    }
+    
+    //MARK: - Add Item Delegate Functions Implementation
+    func addItem(_ controller: AddItemController, title: String){
+        let rowIndex = dataModel.itemsCount
+        dataModel.addItem(title: title)
+        let indexPath = IndexPath(row: rowIndex, section: 0)
+        let indexPaths = [indexPath]
+        tableView.insertRows(at: indexPaths, with: .automatic)
+        navigationController?.popViewController(animated: true)
+    }
+    
+    func addItemDidCancel(_ controller: AddItemController) {
+        navigationController?.popViewController(animated: true)
+    }
     
     //MARK: - Table View Delegate Protocol Methods
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
