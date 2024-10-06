@@ -21,9 +21,17 @@ class DataModel {
         return checklistItems[index]
     }
     
+    func getTitle(at index: Int) -> String {
+        return getItem(at: index).title
+    }
+    
     func addItem(title: String, hasCheckmark: Bool = false){
         let item = ChecklistItem(title: title, hasCheckmark: hasCheckmark)
         checklistItems.append(item)
+    }
+    
+    func editItem(at index: Int, newTitle: String){
+        checklistItems[index].title = newTitle
     }
     
     func removeItem(at row: Int){

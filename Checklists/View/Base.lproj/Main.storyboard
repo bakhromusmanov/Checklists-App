@@ -16,15 +16,21 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" accessoryType="checkmark" indentationWidth="10" reuseIdentifier="ChecklistItem" id="XiQ-hG-O0r">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" accessoryType="detailDisclosureButton" indentationWidth="10" reuseIdentifier="ChecklistItem" id="XiQ-hG-O0r">
                                 <rect key="frame" x="0.0" y="50" width="375" height="43.5"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="XiQ-hG-O0r" id="zMc-Os-9LB">
-                                    <rect key="frame" x="0.0" y="0.0" width="335" height="43.5"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="316.5" height="43.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" tag="1001" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="✓" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tvq-Wi-lg1">
+                                            <rect key="frame" x="20" y="11.5" width="15" height="21"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <color key="textColor" systemColor="systemBlueColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
                                         <label opaque="NO" userInteractionEnabled="NO" tag="1000" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7d3-Xc-k1Q">
-                                            <rect key="frame" x="16" y="11.5" width="41.5" height="21"/>
+                                            <rect key="frame" x="43" y="11.5" width="41.5" height="21"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
@@ -32,10 +38,15 @@
                                     </subviews>
                                     <constraints>
                                         <constraint firstItem="7d3-Xc-k1Q" firstAttribute="centerY" secondItem="zMc-Os-9LB" secondAttribute="centerY" id="Ah5-48-gYc"/>
+                                        <constraint firstItem="7d3-Xc-k1Q" firstAttribute="leading" secondItem="tvq-Wi-lg1" secondAttribute="trailing" constant="8" id="I7W-Uy-WOw"/>
                                         <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="7d3-Xc-k1Q" secondAttribute="trailing" constant="20" symbolic="YES" id="VxY-xb-A1a"/>
-                                        <constraint firstItem="7d3-Xc-k1Q" firstAttribute="leading" secondItem="zMc-Os-9LB" secondAttribute="leadingMargin" id="oir-n4-sXQ"/>
+                                        <constraint firstItem="tvq-Wi-lg1" firstAttribute="leading" secondItem="zMc-Os-9LB" secondAttribute="leading" constant="20" symbolic="YES" id="wqT-KS-luD"/>
+                                        <constraint firstItem="tvq-Wi-lg1" firstAttribute="centerY" secondItem="zMc-Os-9LB" secondAttribute="centerY" id="x6B-mZ-NJs"/>
                                     </constraints>
                                 </tableViewCellContentView>
+                                <connections>
+                                    <segue destination="FxK-wN-SH7" kind="show" identifier="EditItem" trigger="accessoryAction" id="zsZ-9W-epB"/>
+                                </connections>
                             </tableViewCell>
                         </prototypes>
                         <sections/>
@@ -59,7 +70,7 @@
         <!--Add Item-->
         <scene sceneID="RYO-vh-bvF">
             <objects>
-                <tableViewController id="FxK-wN-SH7" customClass="AddItemController" customModule="Checklists" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController id="FxK-wN-SH7" customClass="ItemDetailController" customModule="Checklists" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" estimatedSectionHeaderHeight="-1" sectionFooterHeight="18" estimatedSectionFooterHeight="-1" id="jrv-2v-QFx">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -86,7 +97,7 @@
                                             </subviews>
                                             <constraints>
                                                 <constraint firstItem="TiO-oT-4wn" firstAttribute="centerY" secondItem="rwR-yW-bZs" secondAttribute="centerY" id="4n8-Xf-N7Y"/>
-                                                <constraint firstItem="TiO-oT-4wn" firstAttribute="leading" secondItem="rwR-yW-bZs" secondAttribute="leading" constant="20" symbolic="YES" id="PaY-gh-yWg"/>
+                                                <constraint firstItem="TiO-oT-4wn" firstAttribute="leading" secondItem="rwR-yW-bZs" secondAttribute="leading" constant="20" symbolic="YES" id="Pyd-P9-eAe"/>
                                                 <constraint firstAttribute="trailing" secondItem="TiO-oT-4wn" secondAttribute="trailing" constant="20" symbolic="YES" id="wqA-Oo-SPe"/>
                                             </constraints>
                                         </tableViewCellContentView>
@@ -99,6 +110,7 @@
                             <outlet property="delegate" destination="FxK-wN-SH7" id="2er-I6-s7O"/>
                         </connections>
                     </tableView>
+                    <toolbarItems/>
                     <navigationItem key="navigationItem" title="Add Item" largeTitleDisplayMode="never" id="jHW-pB-WeK">
                         <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="Bj0-Jv-bBy">
                             <connections>
@@ -111,6 +123,7 @@
                             </connections>
                         </barButtonItem>
                     </navigationItem>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="doneBarButton" destination="1uy-qu-KCj" id="Z11-1v-Sr1"/>
                         <outlet property="textField" destination="TiO-oT-4wn" id="0fR-xI-OZ2"/>
@@ -139,9 +152,15 @@
             <point key="canvasLocation" x="-2759.1999999999998" y="-385.45727136431788"/>
         </scene>
     </scenes>
+    <inferredMetricsTieBreakers>
+        <segue reference="zsZ-9W-epB"/>
+    </inferredMetricsTieBreakers>
     <resources>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemBlueColor">
+            <color red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

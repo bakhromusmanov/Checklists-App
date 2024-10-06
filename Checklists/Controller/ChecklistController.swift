@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ChecklistController: UITableViewController, AddItemDelegate {
+class ChecklistController: UITableViewController, ItemDetailDelegate {
     
     let dataModel = DataModel()
     
@@ -26,7 +26,8 @@ class ChecklistController: UITableViewController, AddItemDelegate {
     }
     
     func configureCheckmark(for cell: UITableViewCell, with item: ChecklistItem){
-        cell.accessoryType = item.hasCheckmark ? .checkmark : .none
+        let checkmarkLabel = cell.viewWithTag(1001) as! UILabel
+        checkmarkLabel.text = item.hasCheckmark ? "✓" : ""
     }
 }
 
@@ -34,13 +35,22 @@ extension ChecklistController {
     //MARK: - Navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "AddItem"{
-            let controller = segue.destination as! AddItemController
+            let controller = segue.destination as! ItemDetailController
             controller.delegate = self
+        } else if segue.identifier == "EditItem" {
+            let controller = segue.destination as! ItemDetailController
+            controller.delegate = self
+            
+            if let indexPath = tableView.indexPath(for: sender as! UITableViewCell){
+                let rowIndex = indexPath.row
+                let title = dataModel.getTitle(at: rowIndex)
+                controller.editingItem = (oldTitle: title, index: rowIndex)
+            }
         }
     }
     
     //MARK: - Add Item Delegate Functions Implementation
-    func addItem(_ controller: AddItemController, title: String){
+    func addItem(_ controller: ItemDetailController, title: String){
         let rowIndex = dataModel.itemsCount
         dataModel.addItem(title: title)
         let indexPath = IndexPath(row: rowIndex, section: 0)
@@ -49,7 +59,17 @@ extension ChecklistController {
         navigationController?.popViewController(animated: true)
     }
     
-    func addItemDidCancel(_ controller: AddItemController) {
+    func cancelItem(_ controller: ItemDetailController) {
+        navigationController?.popViewController(animated: true)
+    }
+    
+    func editItem(_ controller: ItemDetailController, newTitle: String, at index: Int) {
+        dataModel.editItem(at: index, newTitle: newTitle)
+        let indexPath = IndexPath(row: index, section: 0)
+        if let cell = tableView.cellForRow(at: indexPath){
+            let item = dataModel.getItem(at: index)
+            configureTitle(for: cell, with: item)
+        }
         navigationController?.popViewController(animated: true)
     }
     
