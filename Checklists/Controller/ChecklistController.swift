@@ -14,6 +14,10 @@ class ChecklistController: UITableViewController, ItemDetailDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationItem.largeTitleDisplayMode = .always
+        dataModel.loadChecklistItems()
+        
+        print("Documents Folder Path: \(dataModel.documentsFolder())")
+        print("Data File Path: \(dataModel.dataFilePath())")
     }
     
     // MARK: - Actions
@@ -57,6 +61,8 @@ extension ChecklistController {
         let indexPaths = [indexPath]
         tableView.insertRows(at: indexPaths, with: .automatic)
         navigationController?.popViewController(animated: true)
+        
+        dataModel.saveChecklistItems()
     }
     
     func cancelItem(_ controller: ItemDetailController) {
@@ -71,6 +77,8 @@ extension ChecklistController {
             configureTitle(for: cell, with: item)
         }
         navigationController?.popViewController(animated: true)
+        
+        dataModel.saveChecklistItems()
     }
     
     //MARK: - Table View Delegate Protocol Methods
@@ -81,12 +89,16 @@ extension ChecklistController {
             configureCheckmark(for: cell, with: item)
         }
         tableView.deselectRow(at: indexPath, animated: true)
+        
+        dataModel.saveChecklistItems()
     }
     
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         dataModel.removeItem(at: indexPath.row)
         let indexPaths = [indexPath]
         tableView.deleteRows(at: indexPaths, with: .automatic)
+        
+        dataModel.saveChecklistItems()
     }
     
     //MARK: - Table View Data Source Protocol Methods

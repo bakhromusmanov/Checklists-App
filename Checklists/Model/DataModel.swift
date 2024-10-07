@@ -37,4 +37,36 @@ class DataModel {
     func removeItem(at row: Int){
         checklistItems.remove(at: row)
     }
+    
+    func documentsFolder() -> URL {
+        let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+        return paths[0]
+    }
+    
+    func dataFilePath() -> URL {
+        return documentsFolder().appending(path: "Checklists.plist")
+    }
+    
+    func saveChecklistItems(){
+        let encoder = PropertyListEncoder()
+        do {
+            let data = try encoder.encode(checklistItems)
+            try data.write(to: dataFilePath(), options: .atomic)
+        } catch {
+            print("Error encoding checklistItems array: \(error.localizedDescription)")
+        }
+    }
+    
+    func loadChecklistItems(){
+        let path = dataFilePath()
+        
+        if let data = try? Data(contentsOf: path){
+            let decoder = PropertyListDecoder()
+            do {
+                checklistItems = try decoder.decode([ChecklistItem].self, from: data)
+            } catch {
+                print("Error decoding checklistItems array: \(error.localizedDescription)")
+            }
+        }
+    }
 }
