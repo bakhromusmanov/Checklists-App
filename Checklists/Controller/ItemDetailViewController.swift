@@ -7,35 +7,43 @@
 
 import UIKit
 
-class ItemDetailController: UITableViewController, UITextFieldDelegate {
+class ItemDetailViewController: UITableViewController, UITextFieldDelegate {
     weak var delegate: ItemDetailDelegate?
-    var editingItem: (oldTitle: String, index: Int)?
+    var itemToEdit: ChecklistItem?
     @IBOutlet weak var textField: UITextField!
     @IBOutlet weak var doneBarButton: UIBarButtonItem!
     
     override func viewDidLoad(){
         super.viewDidLoad()
-        if let editingItem = editingItem {
+        if let itemToEdit = itemToEdit {
             doneBarButton.isEnabled = true
-            textField.text = editingItem.oldTitle
+            textField.text = itemToEdit.title
             title = "Edit Item"
+        } else {
+            title = "Add Item"
         }
-        
+
         navigationItem.largeTitleDisplayMode = .never
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         textField.becomeFirstResponder()
     }
     
     //MARK: - Actions
     @IBAction func cancelPressed(){
-        delegate?.cancelItem(self)
+        delegate?.itemDetailControllerDidCancel(self)
     }
     
     @IBAction func donePressed(){
         if let title = textField.text, isValidInput(text: title) {
-            if let editingItem = editingItem {
-                delegate?.editItem(self, newTitle: title, at: editingItem.index)
+            if let itemToEdit = itemToEdit {
+                itemToEdit.title = title
+                delegate?.itemDetailController(self, didFinishEditing: itemToEdit)
             } else {
-                delegate?.addItem(self, title: title)
+                let item = ChecklistItem(title: title)
+                delegate?.itemDetailController(self, didFinishAdding: item)
             }
         }
     }
@@ -44,10 +52,9 @@ class ItemDetailController: UITableViewController, UITextFieldDelegate {
     func isValidInput(text: String) -> Bool {
         return !text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
     }
-
 }
 
-extension ItemDetailController {
+extension ItemDetailViewController {
     //MARK: - Text Field Delegate Protocol Methods
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         if let oldText = textField.text, let range = Range(range, in: oldText) {
@@ -69,7 +76,7 @@ extension ItemDetailController {
 }
 
 protocol ItemDetailDelegate : AnyObject {
-    func cancelItem(_ controller: ItemDetailController)
-    func addItem(_ controller: ItemDetailController, title: String)
-    func editItem(_ controller: ItemDetailController, newTitle: String, at index: Int)
+    func itemDetailControllerDidCancel(_ controller: ItemDetailViewController)
+    func itemDetailController(_ controller: ItemDetailViewController, didFinishAdding item: ChecklistItem)
+    func itemDetailController(_ controller: ItemDetailViewController, didFinishEditing item: ChecklistItem)
 }

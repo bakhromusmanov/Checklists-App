@@ -7,31 +7,28 @@
 
 import Foundation
 
-class DataModel {
+class Checklist : Codable, Equatable {
+    var title: String
     var checklistItems: [ChecklistItem]
     var itemsCount: Int {
         return checklistItems.count
     }
     
-    init(){
-        self.checklistItems = []
+    init(title: String, checklistItems: [ChecklistItem] = []){
+        self.title = title
+        self.checklistItems = checklistItems
     }
     
     func getItem(at index: Int) -> ChecklistItem {
         return checklistItems[index]
     }
     
-    func getTitle(at index: Int) -> String {
+    func getItemTitle(at index: Int) -> String {
         return getItem(at: index).title
     }
     
-    func addItem(title: String, hasCheckmark: Bool = false){
-        let item = ChecklistItem(title: title, hasCheckmark: hasCheckmark)
+    func addItem(with item: ChecklistItem) {
         checklistItems.append(item)
-    }
-    
-    func editItem(at index: Int, newTitle: String){
-        checklistItems[index].title = newTitle
     }
     
     func removeItem(at row: Int){
@@ -58,9 +55,7 @@ class DataModel {
     }
     
     func loadChecklistItems(){
-        let path = dataFilePath()
-        
-        if let data = try? Data(contentsOf: path){
+        if let data = try? Data(contentsOf: dataFilePath()){
             let decoder = PropertyListDecoder()
             do {
                 checklistItems = try decoder.decode([ChecklistItem].self, from: data)
@@ -68,5 +63,12 @@ class DataModel {
                 print("Error decoding checklistItems array: \(error.localizedDescription)")
             }
         }
+    }
+}
+
+
+extension Checklist {
+    static func == (lhs: Checklist, rhs: Checklist) -> Bool {
+        return lhs === rhs
     }
 }
