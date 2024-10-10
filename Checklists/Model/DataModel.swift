@@ -7,7 +7,7 @@
 
 import Foundation
 
-class ChecklistsModel {
+class DataModel {
     
     var allChecklists: [Checklist]
     var checklistsCount: Int {
@@ -16,6 +16,7 @@ class ChecklistsModel {
     
     init() {
         self.allChecklists = []
+        loadAllChecklists()
     }
     
     func getTitle(at index: Int) -> String {
@@ -33,7 +34,10 @@ class ChecklistsModel {
     func removeChecklist(at index: Int){
         allChecklists.remove(at: index)
     }
-    
+}
+
+extension DataModel {
+    //MARK: - Saving Checklists
     func documentsFolder() -> URL {
         let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
         return paths[0]

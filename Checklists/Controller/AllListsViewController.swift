@@ -9,12 +9,12 @@ import UIKit
 
 class AllListsViewController : UITableViewController, ListDetailDelegate {
     
-    var checklistsModel = ChecklistsModel()
+    var dataModel: DataModel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationController?.navigationBar.prefersLargeTitles = true
-        //checklistsModel.loadAllChecklists()
+        print(dataModel.dataFilePath())
     }
     
     //MARK: - Custom Functions
@@ -32,14 +32,14 @@ class AllListsViewController : UITableViewController, ListDetailDelegate {
             let controller = segue.destination as! ListDetailViewController
             if let indexPath = tableView.indexPath(for: sender as! UITableViewCell){
                 let rowIndex = indexPath.row
-                controller.checklistToEdit = checklistsModel.allChecklists[rowIndex]
+                controller.checklistToEdit = dataModel.allChecklists[rowIndex]
                 controller.delegate = self
             }
         } else if segue.identifier == "OpenChecklist" {
             let controller = segue.destination as! ChecklistViewController
             if let indexPath = tableView.indexPath(for: sender as! UITableViewCell){
                 let rowIndex = indexPath.row
-                controller.checklist = checklistsModel.allChecklists[rowIndex]
+                controller.checklist = dataModel.allChecklists[rowIndex]
             }
         }
     }
@@ -50,45 +50,39 @@ class AllListsViewController : UITableViewController, ListDetailDelegate {
     }
     
     func ChecklistDetailController(_ controller: ListDetailViewController, didFinishAdding checklistToAdd: Checklist) {
-        let rowIndex = checklistsModel.checklistsCount
-        checklistsModel.addChecklist(with: checklistToAdd)
+        let rowIndex = dataModel.checklistsCount
+        dataModel.addChecklist(with: checklistToAdd)
         let indexPath = IndexPath(row: rowIndex, section: 0)
         tableView.insertRows(at: [indexPath], with: .automatic)
         navigationController?.popViewController(animated: true)
-        
-        //checklistsModel.saveAllChecklists()
     }
     
     func ChecklistDetailController(_ controller: ListDetailViewController, didFinishEditing checklist: Checklist) {
-        if let index = checklistsModel.allChecklists.firstIndex(of: checklist){
+        if let index = dataModel.allChecklists.firstIndex(of: checklist){
             let indexPath = IndexPath(row: index, section: 0)
             if let cell = tableView.cellForRow(at: indexPath){
                 configureTitle(for: checklist, at: cell)
             }
-            //checklistsModel.saveAllChecklists()
         }
-        
         navigationController?.popViewController(animated: true)
     }
 }
 extension AllListsViewController {
     //MARK: - Table View Delegates
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        checklistsModel.removeChecklist(at: indexPath.row)
+        dataModel.removeChecklist(at: indexPath.row)
         tableView.deleteRows(at: [indexPath], with: .automatic)
-        
-        //checklistsModel.saveAllChecklists()
     }
     
     //MARK: - Table View Data Source
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return checklistsModel.checklistsCount
+        return dataModel.checklistsCount
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Checklist", for: indexPath)
         let rowIndex = indexPath.row
-        let checklist = checklistsModel.getChecklist(at: rowIndex)
+        let checklist = dataModel.getChecklist(at: rowIndex)
         configureTitle(for: checklist, at: cell)
         
         return cell
