@@ -13,10 +13,19 @@ class DataModel {
     var checklistsCount: Int {
         return allChecklists.count
     }
+    var indexOfSelectedChecklist: Int {
+        get {
+            return UserDefaults.standard.integer(forKey: "ChecklistIndex")
+        } set {
+            UserDefaults.standard.set(newValue, forKey: "ChecklistIndex")
+        }
+    }
     
     init() {
         self.allChecklists = []
+        registerDefaults()
         loadAllChecklists()
+        handleFirstRun()
     }
     
     func getTitle(at index: Int) -> String {
@@ -27,12 +36,23 @@ class DataModel {
         return allChecklists[index]
     }
     
-    func addChecklist(with checklist: Checklist) {
+    func addChecklist(checklist: Checklist) {
         allChecklists.append(checklist)
     }
     
     func removeChecklist(at index: Int){
         allChecklists.remove(at: index)
+    }
+    
+    func handleFirstRun(){
+        let isFirstRun = UserDefaults.standard.bool(forKey: "FirstTime")
+        if isFirstRun {
+            let checklist = Checklist(title: "List")
+            addChecklist(checklist: checklist)
+            
+            indexOfSelectedChecklist = 0
+            UserDefaults.standard.set(false, forKey: "FirstTime")
+        }
     }
 }
 
@@ -66,5 +86,11 @@ extension DataModel {
                 print("Error decoding allChecklists array: \(error.localizedDescription)")
             }
         }
+    }
+    
+    func registerDefaults(){
+        let dictionary: [String: Any] = ["ChecklistIndex" : -1,
+                          "FirstTime": true]
+        UserDefaults.standard.register(defaults: dictionary)
     }
 }

@@ -7,7 +7,7 @@
 
 import UIKit
 
-class AllListsViewController : UITableViewController, ListDetailDelegate {
+class AllListsViewController : UITableViewController, ListDetailDelegate, UINavigationControllerDelegate {
     
     var dataModel: DataModel!
     
@@ -15,6 +15,16 @@ class AllListsViewController : UITableViewController, ListDetailDelegate {
         super.viewDidLoad()
         navigationController?.navigationBar.prefersLargeTitles = true
         print(dataModel.dataFilePath())
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        navigationController?.delegate = self
+        let rowIndex = dataModel.indexOfSelectedChecklist
+        guard rowIndex >= 0 && rowIndex < dataModel.checklistsCount else {return}
+        if rowIndex != -1 {
+            let checklist = dataModel.allChecklists[rowIndex]
+            performSegue(withIdentifier: "OpenChecklist", sender: checklist)
+        }
     }
     
     //MARK: - Custom Functions
@@ -37,10 +47,15 @@ class AllListsViewController : UITableViewController, ListDetailDelegate {
             }
         } else if segue.identifier == "OpenChecklist" {
             let controller = segue.destination as! ChecklistViewController
-            if let indexPath = tableView.indexPath(for: sender as! UITableViewCell){
-                let rowIndex = indexPath.row
-                controller.checklist = dataModel.allChecklists[rowIndex]
-            }
+            let checklist = sender as! Checklist
+            controller.checklist = checklist
+        }
+    }
+    
+    //MARK: -Navigation Controller Delegates
+    func navigationController(_ navigationController: UINavigationController, willShow viewController: UIViewController, animated: Bool) {
+        if viewController === self {
+            dataModel.indexOfSelectedChecklist = -1
         }
     }
     
@@ -51,7 +66,7 @@ class AllListsViewController : UITableViewController, ListDetailDelegate {
     
     func ChecklistDetailController(_ controller: ListDetailViewController, didFinishAdding checklistToAdd: Checklist) {
         let rowIndex = dataModel.checklistsCount
-        dataModel.addChecklist(with: checklistToAdd)
+        dataModel.addChecklist(checklist: checklistToAdd)
         let indexPath = IndexPath(row: rowIndex, section: 0)
         tableView.insertRows(at: [indexPath], with: .automatic)
         navigationController?.popViewController(animated: true)
@@ -72,6 +87,12 @@ extension AllListsViewController {
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         dataModel.removeChecklist(at: indexPath.row)
         tableView.deleteRows(at: [indexPath], with: .automatic)
+    }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let checklist = dataModel.allChecklists[indexPath.row]
+        performSegue(withIdentifier: "OpenChecklist", sender: checklist)
+        dataModel.indexOfSelectedChecklist = indexPath.row
     }
     
     //MARK: - Table View Data Source

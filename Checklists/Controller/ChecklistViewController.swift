@@ -46,6 +46,7 @@ extension ChecklistViewController {
         }
     }
     
+    
     //MARK: - Add Item Delegate Functions Implementation
     func itemDetailControllerDidCancel(_ controller: ItemDetailViewController) {
         navigationController?.popViewController(animated: true)

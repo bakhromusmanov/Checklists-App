@@ -56,7 +56,6 @@
                                     </constraints>
                                 </tableViewCellContentView>
                                 <connections>
-                                    <segue destination="h2K-BC-Cs5" kind="show" identifier="OpenChecklist" id="A54-Qw-gew"/>
                                     <segue destination="SVB-PY-z4V" kind="show" identifier="EditChecklist" trigger="accessoryAction" id="sXO-Yn-dCu"/>
                                 </connections>
                             </tableViewCell>
@@ -73,6 +72,9 @@
                             </connections>
                         </barButtonItem>
                     </navigationItem>
+                    <connections>
+                        <segue destination="h2K-BC-Cs5" kind="show" identifier="OpenChecklist" id="Alg-hL-ddL"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="YGk-GB-xa6" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -277,7 +279,7 @@
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
         <systemColor name="systemBlueColor">
-            <color red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>
