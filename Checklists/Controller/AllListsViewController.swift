@@ -21,16 +21,31 @@ class AllListsViewController : UITableViewController, ListDetailDelegate, UINavi
         navigationController?.delegate = self
         let rowIndex = dataModel.indexOfSelectedChecklist
         guard rowIndex >= 0 && rowIndex < dataModel.checklistsCount else {return}
+        
         if rowIndex != -1 {
             let checklist = dataModel.allChecklists[rowIndex]
             performSegue(withIdentifier: "OpenChecklist", sender: checklist)
         }
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        tableView.reloadData()
+    }
+    
     //MARK: - Custom Functions
     func configureTitle(for checklist: Checklist, at cell: UITableViewCell){
         let label = cell.viewWithTag(1002) as! UILabel
         label.text = checklist.title
+    }
+    
+    func configureSubtitle(for checklist: Checklist, at cell: UITableViewCell){
+        let label = cell.viewWithTag(1003) as! UILabel
+        label.text = dataModel.getNumberOfTasksLeft(for: checklist)
+    }
+    
+    func configureIconImage(for checklist: Checklist, at cell: UITableViewCell) {
+        let imageView = cell.viewWithTag(1006) as! UIImageView
+        imageView.image = UIImage(named: checklist.folderName)
     }
     
     //MARK: - Navigation
@@ -65,20 +80,15 @@ class AllListsViewController : UITableViewController, ListDetailDelegate, UINavi
     }
     
     func ChecklistDetailController(_ controller: ListDetailViewController, didFinishAdding checklistToAdd: Checklist) {
-        let rowIndex = dataModel.checklistsCount
         dataModel.addChecklist(checklist: checklistToAdd)
-        let indexPath = IndexPath(row: rowIndex, section: 0)
-        tableView.insertRows(at: [indexPath], with: .automatic)
+        dataModel.sortChecklists()
+        tableView.reloadData()
         navigationController?.popViewController(animated: true)
     }
     
     func ChecklistDetailController(_ controller: ListDetailViewController, didFinishEditing checklist: Checklist) {
-        if let index = dataModel.allChecklists.firstIndex(of: checklist){
-            let indexPath = IndexPath(row: index, section: 0)
-            if let cell = tableView.cellForRow(at: indexPath){
-                configureTitle(for: checklist, at: cell)
-            }
-        }
+        dataModel.sortChecklists()
+        tableView.reloadData()
         navigationController?.popViewController(animated: true)
     }
 }
@@ -101,11 +111,12 @@ extension AllListsViewController {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "Checklist", for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "ChecklistCell", for: indexPath)
         let rowIndex = indexPath.row
         let checklist = dataModel.getChecklist(at: rowIndex)
         configureTitle(for: checklist, at: cell)
-        
+        configureSubtitle(for: checklist, at: cell)
+        configureIconImage(for: checklist, at: cell)
         return cell
     }
 }

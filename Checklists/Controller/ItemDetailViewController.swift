@@ -22,7 +22,7 @@ class ItemDetailViewController: UITableViewController, UITextFieldDelegate {
         } else {
             title = "Add Item"
         }
-
+        
         navigationItem.largeTitleDisplayMode = .never
     }
     

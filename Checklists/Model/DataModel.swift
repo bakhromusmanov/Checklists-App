@@ -10,6 +10,7 @@ import Foundation
 class DataModel {
     
     var allChecklists: [Checklist]
+    
     var checklistsCount: Int {
         return allChecklists.count
     }
@@ -44,6 +45,14 @@ class DataModel {
         allChecklists.remove(at: index)
     }
     
+    func getIndexOf(checklist: Checklist) -> Int?{
+        return allChecklists.firstIndex(of: checklist)
+    }
+    
+    func sortChecklists(){
+        allChecklists.sort(by: <)
+    }
+    
     func handleFirstRun(){
         let isFirstRun = UserDefaults.standard.bool(forKey: "FirstTime")
         if isFirstRun {
@@ -53,6 +62,22 @@ class DataModel {
             indexOfSelectedChecklist = 0
             UserDefaults.standard.set(false, forKey: "FirstTime")
         }
+    }
+    
+    func getNumberOfTasksLeft(for checklist: Checklist) -> String {
+        let allItems = checklist.items
+        let uncheckedItems = allItems.filter { !$0.hasCheckmark }
+        let subtitle: String
+        
+        if allItems.count == 0 {
+            subtitle = "(No items)"
+        } else if uncheckedItems.count == 0 {
+            subtitle = "All done"
+        } else {
+            subtitle = "\(uncheckedItems.count) remaining"
+        }
+        
+        return subtitle
     }
 }
 
@@ -89,8 +114,9 @@ extension DataModel {
     }
     
     func registerDefaults(){
-        let dictionary: [String: Any] = ["ChecklistIndex" : -1,
-                          "FirstTime": true]
+        let dictionary: [String: Any] = [
+            "ChecklistIndex" : -1,
+            "FirstTime": true]
         UserDefaults.standard.register(defaults: dictionary)
     }
 }

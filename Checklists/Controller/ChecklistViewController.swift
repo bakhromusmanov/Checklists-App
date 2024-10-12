@@ -91,11 +91,11 @@ extension ChecklistViewController {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "ChecklistItem", for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "ChecklistItemCell", for: indexPath)
         let item = checklist.getItem(at: indexPath.row)
         configureTitle(for: cell, with: item)
         configureCheckmark(for: cell, with: item)
         return cell
     }
-    
 }
+
