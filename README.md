@@ -24,10 +24,15 @@ Welcome to **Checklist Manager**, an app designed to help users efficiently orga
 
 ## 🖼️ Screenshots
 
-![Checklist Screenshot 1](Simulator Screenshot - 1.png)
-![Checklist Screenshot 2](Simulator Screenshot - 2.png)
-![Checklist Screenshot 3](Simulator Screenshot - 3.png)
-![Checklist Screenshot 4](Simulator Screenshot - 4.png)
+![Simulator Screenshot 1](Simulator%20Screenshot%20-%201.png)
+![Simulator Screenshot 2](Simulator%20Screenshot%20-%202.png)
+![Simulator Screenshot 3](Simulator%20Screenshot%20-%203.png)
+![Simulator Screenshot 4](Simulator%20Screenshot%20-%204.png)
+![Simulator Screenshot 5](Simulator%20Screenshot%20-%205.png)
+![Simulator Screenshot 6](Simulator%20Screenshot%20-%206.png)
+![Simulator Screenshot 7](Simulator%20Screenshot%20-%207.png)
+![Simulator Screenshot 8](Simulator%20Screenshot%20-%208.png)
+![Simulator Screenshot 9](Simulator%20Screenshot%20-%209.png)
 
 ## 🚀 Features
 - **Customizable checklists**: Choose unique names and icons for your checklists to better organize your tasks.
