@@ -10,14 +10,13 @@ import UIKit
 class ChecklistViewController: UITableViewController, ItemDetailDelegate {
     
     var checklist: Checklist!
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationItem.largeTitleDisplayMode = .never
         title = checklist.title
     }
     
-    //MARK: - Custom Functions
+    //MARK: - Cstom Functions
     func configureTitle(for cell: UITableViewCell, with item: ChecklistItem){
         let label = cell.viewWithTag(1000) as! UILabel
         label.text = item.title
@@ -45,7 +44,6 @@ extension ChecklistViewController {
             }
         }
     }
-    
     
     //MARK: - Add Item Delegate Functions Implementation
     func itemDetailControllerDidCancel(_ controller: ItemDetailViewController) {

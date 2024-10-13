@@ -12,6 +12,9 @@ class ItemDetailViewController: UITableViewController, UITextFieldDelegate {
     var itemToEdit: ChecklistItem?
     @IBOutlet weak var textField: UITextField!
     @IBOutlet weak var doneBarButton: UIBarButtonItem!
+    @IBOutlet weak var shouldRemindSwitch: UISwitch!
+    @IBOutlet weak var datePicker: UIDatePicker!
+    
     
     override func viewDidLoad(){
         super.viewDidLoad()
@@ -19,6 +22,8 @@ class ItemDetailViewController: UITableViewController, UITextFieldDelegate {
             doneBarButton.isEnabled = true
             textField.text = itemToEdit.title
             title = "Edit Item"
+            shouldRemindSwitch.isOn = itemToEdit.shouldRemind
+            datePicker.date = itemToEdit.dueDate
         } else {
             title = "Add Item"
         }
@@ -40,14 +45,35 @@ class ItemDetailViewController: UITableViewController, UITextFieldDelegate {
         if let title = textField.text, isValidInput(text: title) {
             if let itemToEdit = itemToEdit {
                 itemToEdit.title = title
+                itemToEdit.shouldRemind = shouldRemindSwitch.isOn
+                itemToEdit.dueDate = datePicker.date
+                itemToEdit.scheduleNotification()
                 delegate?.itemDetailController(self, didFinishEditing: itemToEdit)
             } else {
                 let item = ChecklistItem(title: title)
+                item.shouldRemind = shouldRemindSwitch.isOn
+                item.dueDate = datePicker.date
+                item.scheduleNotification()
                 delegate?.itemDetailController(self, didFinishAdding: item)
             }
         }
     }
     
+    @IBAction func shouldRemindSwitchToggled(_ switchControl: UISwitch){
+        textField.resignFirstResponder()
+        if switchControl.isOn {
+            let center = UNUserNotificationCenter.current()
+            center.requestAuthorization(options: [.alert, .sound]) {
+                (accessGranted, error) in
+                if accessGranted {
+                    print("Notifications request accepted")
+                } else {
+                    print("Notifications request denied")
+                }
+            }
+        }
+    }
+
     //MARK: - Custom Functions
     func isValidInput(text: String) -> Bool {
         return !text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty

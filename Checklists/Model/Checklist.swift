@@ -8,6 +8,7 @@
 import Foundation
 
 class Checklist : Codable, Equatable, Comparable {
+    
     var title: String
     var items: [ChecklistItem]
     var folderName: String

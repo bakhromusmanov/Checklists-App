@@ -10,7 +10,6 @@ import Foundation
 class DataModel {
     
     var allChecklists: [Checklist]
-    
     var checklistsCount: Int {
         return allChecklists.count
     }
@@ -27,6 +26,13 @@ class DataModel {
         registerDefaults()
         loadAllChecklists()
         handleFirstRun()
+    }
+    
+    class func nextChecklistItemID() -> Int {
+        let userDefault = UserDefaults.standard
+        let itemID = userDefault.integer(forKey: "ChecklistItemID")
+        userDefault.set(itemID + 1, forKey: "ChecklistItemID")
+        return itemID
     }
     
     func getTitle(at index: Int) -> String {
@@ -56,7 +62,9 @@ class DataModel {
     func handleFirstRun(){
         let isFirstRun = UserDefaults.standard.bool(forKey: "FirstTime")
         if isFirstRun {
-            let checklist = Checklist(title: "List")
+            let checklist = Checklist(title: "Example List")
+            let item = ChecklistItem(title: "Example Item")
+            checklist.addItem(item: item)
             addChecklist(checklist: checklist)
             
             indexOfSelectedChecklist = 0

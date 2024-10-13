@@ -10,7 +10,6 @@ import UIKit
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     
     var window: UIWindow?
-    
     let dataModel = DataModel()
     
     func saveData(){

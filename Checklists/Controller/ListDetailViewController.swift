@@ -25,6 +25,7 @@ class ListDetailViewController : UITableViewController, UITextFieldDelegate, Cho
             temporaryFolderName = checklistToEdit.folderName
             title = "Edit Checklist"
         } else {
+            temporaryFolderName = "Folder"
             title = "Add Checklist"
         }
         
