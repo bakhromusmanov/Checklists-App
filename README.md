@@ -1,5 +1,5 @@
 # Checklist Manager 📋
-**Created by Bakhrom Usmanov** using SwiftUI
+**Created by Bakhrom Usmanov** using UIKit
 
 Welcome to **Checklist Manager**, an app designed to help users efficiently organize and manage their tasks through intuitive checklists and to-do items.
 
