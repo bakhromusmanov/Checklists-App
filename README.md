@@ -3,6 +3,8 @@
 
 Welcome to **Checklist Manager**, an app designed to help users efficiently organize and manage their tasks through intuitive checklists and to-do items.
 
+![Simulator Screenshot 0](Simulator%20Screenshot%20-%200.png)
+
 ## 📱 What the App Can Do:
 
 ### 1. **Create and manage checklists**:
@@ -24,7 +26,6 @@ Welcome to **Checklist Manager**, an app designed to help users efficiently orga
 
 ## 🖼️ Screenshots
 
-![Simulator Screenshot 0](Simulator%20Screenshot%20-%200.png)
 ![Simulator Screenshot 1](Simulator%20Screenshot%20-%201.png)
 ![Simulator Screenshot 2](Simulator%20Screenshot%20-%202.png)
 ![Simulator Screenshot 3](Simulator%20Screenshot%20-%203.png)
